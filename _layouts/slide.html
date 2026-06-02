@@ -1,0 +1,41 @@
+---
+layout: default
+---
+{% assign slides = site.slides | sort: "slide_number" %}
+{% assign current_index = nil %}
+{% for s in slides %}
+  {% if s.path == page.path %}{% assign current_index = forloop.index0 %}{% endif %}
+{% endfor %}
+{% if current_index and current_index > 0 %}
+  {% assign prev_index = current_index | minus: 1 %}
+  {% assign prev_slide = slides[prev_index] %}
+{% endif %}
+{% assign next_index = current_index | plus: 1 %}
+{% if next_index < slides.size %}
+  {% assign next_slide = slides[next_index] %}
+{% endif %}
+
+<article class="slide">
+  <header class="slide-header">
+    <span class="slide-number">{{ page.slide_number | prepend: "00" | slice: -2, 2 }}</span>
+    <a href="{{ '/' | relative_url }}" class="back">← все слайды</a>
+  </header>
+
+  <h1 class="slide-title">{{ page.title }}</h1>
+  {% if page.subtitle %}<p class="slide-subtitle">{{ page.subtitle }}</p>{% endif %}
+
+  <div class="slide-content">
+    {{ content }}
+  </div>
+
+  <nav class="slide-nav">
+    {% if prev_slide %}
+      <a href="{{ prev_slide.url | relative_url }}">← {{ prev_slide.title }}</a>
+    {% else %}
+      <span></span>
+    {% endif %}
+    {% if next_slide %}
+      <a href="{{ next_slide.url | relative_url }}">{{ next_slide.title }} →</a>
+    {% endif %}
+  </nav>
+</article>

@@ -1,0 +1,20 @@
+---
+layout: default
+title: "Три режима работы с неопределённостью"
+---
+<div class="index">
+  <h1 class="index-title">{{ site.title }}</h1>
+  <p class="index-meta">Конспект лекции-кейнота Ивана Степанова</p>
+
+  <ul class="slide-list">
+    {% assign slides = site.slides | sort: "slide_number" %}
+    {% for slide in slides %}
+    <li class="slide-list-item">
+      <a href="{{ slide.url | relative_url }}">
+        <span class="slide-list-num">{{ slide.slide_number | prepend: "00" | slice: -2, 2 }}</span>
+        <span class="slide-list-title">{{ slide.title }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

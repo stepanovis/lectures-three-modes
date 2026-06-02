@@ -1,0 +1,24 @@
+title: "Три режима работы с неопределённостью"
+description: "Конспект лекции-кейнота Ивана Степанова"
+baseurl: "/lectures-three-modes"
+url: "https://stepanovis.github.io"
+
+collections:
+  slides:
+    output: true
+    permalink: /slides/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "slides"
+    values:
+      layout: slide
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
