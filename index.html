@@ -2,19 +2,50 @@
 layout: default
 title: "Три режима работы с неопределённостью"
 ---
-<div class="index">
-  <h1 class="index-title">{{ site.title }}</h1>
-  <p class="index-meta">Конспект лекции-кейнота Ивана Степанова</p>
+{% assign slides = site.slides | sort: "slide_number" %}
 
-  <ul class="slide-list">
-    {% assign slides = site.slides | sort: "slide_number" %}
+<div class="layout">
+  <nav class="sidenav">
+    <a href="#" class="sidenav-title">{{ site.title }}</a>
+    <ul class="sidenav-list">
+      {% for slide in slides %}
+      <li>
+        <a href="#slide-{{ slide.slide_number }}" class="sidenav-link">
+          <span class="sidenav-num">{{ slide.slide_number | prepend: "00" | slice: -2, 2 }}</span>
+          <span class="sidenav-name">{{ slide.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <main class="content">
     {% for slide in slides %}
-    <li class="slide-list-item">
-      <a href="{{ slide.url | relative_url }}">
-        <span class="slide-list-num">{{ slide.slide_number | prepend: "00" | slice: -2, 2 }}</span>
-        <span class="slide-list-title">{{ slide.title }}</span>
-      </a>
-    </li>
+    <section class="slide-section" id="slide-{{ slide.slide_number }}">
+      <div class="slide-section-meta">
+        <span class="slide-section-num">{{ slide.slide_number | prepend: "00" | slice: -2, 2 }}</span>
+      </div>
+      <h2 class="slide-section-title">{{ slide.title }}</h2>
+      {% if slide.subtitle %}<p class="slide-section-subtitle">{{ slide.subtitle }}</p>{% endif %}
+      <div class="slide-section-content">{{ slide.content }}</div>
+    </section>
     {% endfor %}
-  </ul>
+  </main>
 </div>
+
+<script>
+  const sections = document.querySelectorAll('.slide-section');
+  const navLinks = document.querySelectorAll('.sidenav-link');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector('.sidenav-link[href="#' + entry.target.id + '"]');
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
